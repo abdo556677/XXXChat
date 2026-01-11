@@ -17,6 +17,12 @@ coverage
 /src1.rar
 /cypress/videos/
 /cypress/screenshots/
+/test_socket.js
+/test.js
+/client.rar
+/app.mmd
+/app.md
+/FF.md
 
 # Editor directories and files
 .vscode/*

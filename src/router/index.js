@@ -1,9 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 
-// Layouts
-import MainLayout from '@/views/layouts/MainLayout.vue'
-import AuthLayout from '@/views/layouts/AuthLayout.vue'
+import MainLayout from '@/views/core/MainLayout.vue'
+import AuthLayout from '@/views/core/AuthLayout.vue'
 
 const routes = [
   {
@@ -11,10 +10,9 @@ const routes = [
     redirect: () => {
       const authStore = useAuthStore()
       return authStore.isAuthenticated ? '/home' : '/auth/login'
-    }
+    },
   },
 
-  // ✅ صفحات داخل AuthLayout (بدون Header)
   {
     path: '/auth',
     component: AuthLayout,
@@ -30,10 +28,14 @@ const routes = [
         name: 'Register',
         component: () => import('@/views/auth/Register.vue'),
       },
-    ]
+      {
+        path: 'terms',
+        name: 'Terms',
+        component: () => import('@/views/auth/Terms.vue'),
+      },
+    ],
   },
 
-  // ✅ صفحات داخل MainLayout (فيها Header)
   {
     path: '/',
     component: MainLayout,
@@ -42,29 +44,54 @@ const routes = [
       {
         path: 'home',
         name: 'Home',
-        component: () => import('@/views/Home.vue'),
+        component: () => import('@/views/client/home/Home.vue'),
       },
       {
-        path: 'friends',
-        name: 'Friends',
-        component: () => import('@/views/Friends.vue'),
+        path: 'saved',
+        name: 'Saved',
+        component: () => import('@/views/client/saved/saved.vue'),
       },
       {
-        path: 'profile',
+        path: 'home/:id',
+        name: 'Home > post',
+        component: () => import('@/views/client/home/postShow.vue'),
+      },
+      {
+        path: 'profile/:id',
         name: 'Profile',
-        component: () => import('@/views/Profile.vue'),
+        component: () => import('@/views/client/profile/profile.vue'),
       },
       {
-        path: 'messages',
-        name: 'Messages',
-        component: () => import('@/views/Messages.vue'),
+        path: 'users',
+        name: 'Users',
+        component: () => import('@/views/client/users/users.vue'),
+      },
+      {
+        path: 'chat',
+        name: 'chat',
+        component: () => import('@/views/client/chat/chat.vue'),
+      },
+      {
+        path: 'chat/:id',
+        name: 'chat v',
+        component: () => import('@/views/client/chat/showChat.vue')
+      },
+      {
+        path: 'settings',
+        name: 'Settings',
+        component: () => import('@/views/client/settings/settings.vue'),
       },
       {
         path: 'search',
         name: 'Search',
-        component: () => import('@/views/Search.vue'),
+        component: () => import('@/views/client/search/SearchResults.vue'),
       },
-    ]
+      {
+        path: 'notifications',
+        name: 'notifications',
+        component: () => import('@/views/client/notification/notification.vue'),
+      },
+    ],
   },
 ]
 
@@ -84,8 +111,7 @@ router.beforeEach((to, from, next) => {
   // مسجل بالفعل ويحاول الذهاب إلى صفحة تسجيل؟
   else if (to.meta.requiresGuest && authStore.isAuthenticated) {
     next('/home')
-  } 
-  else {
+  } else {
     next()
   }
 })

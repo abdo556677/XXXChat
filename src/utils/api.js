@@ -1,38 +1,50 @@
+// src/utils/api.js
 import axios from 'axios'
-import Cookies from 'js-cookie'
 import { useAuthStore } from '@/stores/auth'
 
+// إنشاء instance لـ axios
 const api = axios.create({
-  baseURL: 'http://localhost:3000/api', // Proxy will forward to 
+  baseURL: 'http://localhost:3000/api',
   headers: {
     'Content-Type': 'application/json'
   }
 })
 
-// Request interceptor to add auth token
+// === Request interceptor: إضافة التوكن لكل طلب ===
 api.interceptors.request.use(
   (config) => {
-    const token = Cookies.get('accessToken')
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`
+    try {
+      const authStore = useAuthStore()
+      const accessToken = authStore.accessToken  // نفترض أن authStore يحتوي على accessToken
+      if (accessToken) {
+        config.headers.Authorization = accessToken
+        // console.log('Added Authorization header from Pinia:', accessToken)
+      }
+    } catch (err) {
+      console.warn('Auth store not ready', err)
     }
     return config
   },
-  (error) => {
-    return Promise.reject(error)
-  }
+  (error) => Promise.reject(error)
 )
-
-// Response interceptor to handle token refresh or logout on 401
+// === Response interceptor: التعامل مع 401 بطريقة آمنة ===
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
-      // Token expired or invalid, logout
-      const authStore = useAuthStore()
-      authStore.logout()
-      // Redirect to login if needed
+    const originalRequest = error.config
+
+    // استثناء endpoint logout لتجنب حلقة لانهائية
+    if (originalRequest?.url?.includes('/auth/logout')) {
+      return Promise.reject(error)
     }
+
+    // إذا 401 ولم يُعالج من قبل
+    if (error.response?.status == 401 || error.response?.status == 403 ) { //&& !originalRequest._retry
+      originalRequest._retry = true
+      const authStore = useAuthStore()
+      authStore.logout() // تسجيل خروج بدون loop
+    }
+
     return Promise.reject(error)
   }
 )

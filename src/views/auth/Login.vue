@@ -112,9 +112,7 @@ const handleLogin = async () => {
       toast.warning('Please fill in all fields')
       return
     }
-
     const response = await authStore.login(form.value)
-    console.log('response: ', response)
 
     if (response && response.success) {
       toast.success('Login successful!')

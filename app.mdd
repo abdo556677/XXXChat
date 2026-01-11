@@ -1,0 +1,59 @@
+<div v-if="activeTab === 'all'" class="space-y-8">
+                    <!-- Posts Section -->
+                    <div v-if="searchStore.results.posts.length > 0">
+                        <h2 class="text-lg font-semibold text-gray-900 mb-4">
+                            Posts
+                        </h2>
+                        <div class="space-y-4">
+                            <div
+                                v-for="post in searchStore.results.posts"
+                                :key="post.id"
+                                class="bg-white p-4 rounded-lg shadow-sm border border-gray-200"
+                            >
+                                <p
+                                    class="text-gray-900"
+                                    v-html="
+                                        highlightText(
+                                            post.content,
+                                            searchStore.query,
+                                        )
+                                    "
+                                ></p>
+                                <p class="text-sm text-gray-500 mt-2">
+                                    By {{ post.author }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Users Section -->
+                    <div v-if="searchStore.results.users.length > 0">
+                        <h2 class="text-lg font-semibold text-gray-900 mb-4">
+                            Users
+                        </h2>
+                        <div class="space-y-4">
+                            <div
+                                v-for="user in searchStore.results.users"
+                                :key="user.id"
+                                class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-center space-x-4"
+                            >
+                                <div
+                                    class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold"
+                                >
+                                    {{
+                                        user.name?.charAt(0).toUpperCase() ||
+                                        'U'
+                                    }}
+                                </div>
+                                <div>
+                                    <p class="font-medium text-gray-900">
+                                        {{ user.name }}
+                                    </p>
+                                    <p class="text-sm text-gray-500">
+                                        {{ user.status }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>

@@ -13,11 +13,17 @@ app.use(Toast)
 
 // Initialize auth store
 import { useAuthStore } from '@/stores/auth'
+import { useSettingsStore } from '@/stores/settings'
+
+const settingStore = useSettingsStore()
 const authStore = useAuthStore()
+
+settingStore.initializeSettings()
 authStore.initialize()
+// console.log(authStore.initialize())
 
 app.mount('#app')
 
-import '@/assets/main.css'
+// import '@/assets/main.css'
 import '@/assets/styles/main.css'
 
