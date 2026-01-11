@@ -19,7 +19,7 @@ import { usePostStore } from '@/stores/post'
 
 
 import { useInfiniteScroll } from '@vueuse/core'
-import postCard from '@/components/PostCard.vue'
+import postCard from '@/components/postCard.vue'
 
 const router = useRouter()
 const authStore = useAuthStore()

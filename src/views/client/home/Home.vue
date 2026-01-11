@@ -214,7 +214,7 @@ import { usePostStore } from '@/stores/post'
 import { Share2, Image as ImageIcon, X, Video, Smile } from 'lucide-vue-next'
 import { useToast } from 'vue-toastification'
 import { useInfiniteScroll } from '@vueuse/core'
-import postCard from '@/components/PostCard.vue'
+import postCard from '@/components/postCard.vue'
 
 const router = useRouter()
 const authStore = useAuthStore()

@@ -68,7 +68,7 @@ import { ref, computed, onMounted } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import { usePostStore } from '@/stores/post'
 
-import PostCard from '@/components/PostCard.vue'
+import PostCard from '@/components/postCard.vue'
 import { useInfiniteScroll } from '@vueuse/core'
 
 // const router = useRouter()
