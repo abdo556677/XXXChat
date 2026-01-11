@@ -19,7 +19,7 @@ class SocketService {
             return
         }
 
-        this.socket = io('http://localhost:3000', {
+        this.socket = io('https://spectacular-dorey-takami-97ae07ca.koyeb.app/api', {
             auth: {
                 token: token,
             },
