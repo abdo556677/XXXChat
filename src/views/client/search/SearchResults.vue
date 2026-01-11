@@ -100,7 +100,7 @@
                                     :key="post.id"
                                     class="bg-white p-4 rounded-lg border-gray-200"
                                 >
-                                    <postCard :post="post" />
+                                    <PostCard :post="post" />
                                 </div>
                             </div>
                         </div>
@@ -136,7 +136,7 @@
                             :key="post.id"
                             class="bg-white p-4 rounded-lg border-gray-200"
                         >
-                            <postCard :post="post" />
+                            <PostCard :post="post" />
                         </div>
                     </div>
 
@@ -164,7 +164,7 @@
 import { ref, onMounted } from 'vue'
 import { useSearchStore } from '@/stores/search'
 import { Search } from 'lucide-vue-next'
-import postCard from '@/components/postCard.vue'
+import PostCard from '@/components/PostCard.vue'
 import usersList from '@/components/usersList.vue'
 
 const searchStore = useSearchStore()

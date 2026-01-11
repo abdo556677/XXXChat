@@ -524,7 +524,7 @@ import {
     Ban,
     Share2,
 } from 'lucide-vue-next'
-import postCard from '@/components/postCard.vue'
+import PostCard from '@/components/PostCard.vue'
 import { useUserStore } from '@/stores/users'
 const showOptions = ref(false)
 

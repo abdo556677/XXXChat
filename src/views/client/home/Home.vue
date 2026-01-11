@@ -141,7 +141,7 @@
                     :key="post.id"
                     class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden transition-all hover:shadow-md"
                 >
-                    <postCard :post="post" />
+                    <PostCard :post="post" />
                 </div>
 
                 <!-- تحميل -->
@@ -214,7 +214,7 @@ import { usePostStore } from '@/stores/post'
 import { Share2, Image as ImageIcon, X, Video, Smile } from 'lucide-vue-next'
 import { useToast } from 'vue-toastification'
 import { useInfiniteScroll } from '@vueuse/core'
-import postCard from '@/components/postCard.vue'
+import PostCard from '@/components/PostCard.vue'
 
 const router = useRouter()
 const authStore = useAuthStore()
