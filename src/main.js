@@ -11,17 +11,10 @@ const pinia = createPinia()
 app.use(pinia)
 app.use(router)
 app.use(Toast)
-async function initApp() {
-    const authStore = useAuthStore()
-    await authStore.fetchUser()
+const authStore = useAuthStore()
 
-    const settingStore = useSettingsStore()
-    settingStore.initializeSettings()
+authStore.initialize()
 
-    app.mount('#app')
-}
-
-initApp()
 // Initialize auth store
 // import { useAuthStore } from '@/stores/auth'
 import { useSettingsStore } from '@/stores/settings'

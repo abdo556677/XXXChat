@@ -14,6 +14,9 @@ export const useAuthStore = defineStore('auth', {
     },
 
     actions: {
+        async initialize() {
+            await this.fetchUser()
+        },
         // تحقق من الجلسة عند تحميل التطبيق
         async fetchUser() {
             this.loading = true
@@ -40,7 +43,6 @@ export const useAuthStore = defineStore('auth', {
         async login(credentials) {
             this.loading = true
             try {
-
                 const res = await authApi.login(credentials)
 
                 if (!res.data?.user)
