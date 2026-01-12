@@ -4,15 +4,24 @@ import { createPinia } from 'pinia'
 import router from './router'
 import Toast from 'vue-toastification'
 import 'vue-toastification/dist/index.css'
+import { useAuthStore } from '@/stores/auth'
 
 const app = createApp(App)
 const pinia = createPinia()
 app.use(pinia)
 app.use(router)
 app.use(Toast)
-import { useAuthStore } from '@/stores/auth'
-const authStore = useAuthStore()
-await authStore.fetchUser()
+async function initApp() {
+    const authStore = useAuthStore()
+    await authStore.fetchUser()
+
+    const settingStore = useSettingsStore()
+    settingStore.initializeSettings()
+
+    app.mount('#app')
+}
+
+initApp()
 // Initialize auth store
 // import { useAuthStore } from '@/stores/auth'
 import { useSettingsStore } from '@/stores/settings'
@@ -27,4 +36,3 @@ app.mount('#app')
 
 // import '@/assets/main.css'
 import '@/assets/styles/main.css'
-
