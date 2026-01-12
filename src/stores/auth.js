@@ -56,7 +56,7 @@ export const useAuthStore = defineStore('auth', {
                 this.loading = false
             }
         },
-
+        
         async register(credentials) {
             this.loading = true
             try {
