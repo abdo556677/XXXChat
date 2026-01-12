@@ -577,7 +577,7 @@ const toggleOptions = () => {
     showOptions.value = !showOptions.value
 }
 onMounted(async () => {
-    authStore.initialize()
+    // authStore.initialize()
     await postStore.fetchPosts()
     await userStore.getUserById(route.params.id)
     await userStore.fetchFollowers(route.params.id)

@@ -1,97 +1,86 @@
 // src/stores/auth.js
 import { defineStore } from 'pinia'
 import authApi from '@/services/authApi'
+
 export const useAuthStore = defineStore('auth', {
-  state: () => ({
-    user: null,
-    accessToken: null,
-    loading: false,
-  }),
+    state: () => ({
+        user: null,
+        loading: false,
+        error: null,
+    }),
 
-  getters: {
-    isAuthenticated: state => !!state.accessToken,
-  },
-
-  actions: {
-    initialize() {
-      const accessToken = localStorage.getItem('accessToken')
-      const user = JSON.parse(localStorage.getItem('user'))
-      if (accessToken && user) {
-        this.accessToken = accessToken
-        this.user = user
-      }
+    getters: {
+        isAuthenticated: state => !!state.user,
     },
 
-    async login(credentials) {
-      this.loading = true
+    actions: {
+        // تحقق من الجلسة عند تحميل التطبيق
+        async fetchUser() {
+            this.loading = true
+            try {
+                const res = await authApi.fetchUser()
 
-      try {
-        const res = await authApi.login(credentials)
+                const data = {
+                    id: res.data.user._id,
+                    name: res.data.user.username,
+                    email: res.data.user.email,
+                    role: res.data.user.role,
+                }
+                this.user = data
+                return true
+            } catch (err) {
+                this.user = null
+                this.error = err.message
+                return false
+            } finally {
+                this.loading = false
+            }
+        },
 
-        if (!res.success) {
-          throw new Error(res.message)
-        }
+        async login(credentials) {
+            this.loading = true
+            try {
 
-        const { accessToken, user } = res.data
-        // alert(user)
-        // console.log('Login successful:', JSON.stringify(user))
+                const res = await authApi.login(credentials)
 
-        this.accessToken = accessToken
-        this.user = user
+                if (!res.data?.user)
+                    throw new Error(res.data?.message || 'Login failed')
 
-        localStorage.setItem('accessToken', accessToken)
-        localStorage.setItem('user', JSON.stringify(user))
+                this.user = res.data.user
+                return { success: true }
+            } catch (error) {
+                return { success: false, message: error.message }
+            } finally {
+                this.loading = false
+            }
+        },
 
-        return { success: true }
-      } catch (error) {
-        return {
-          success: false,
-          message: error.message,
-        }
-      } finally {
-        this.loading = false
-      }
+        async register(credentials) {
+            this.loading = true
+            try {
+                const res = await authApi.register(credentials)
+                return { success: true, data: res.data }
+            } catch (error) {
+                return { success: false, message: error.message }
+            } finally {
+                this.loading = false
+            }
+        },
+
+        async logout() {
+            this.user = null
+            try {
+                await authApi.logout()
+            } catch (_) {}
+        },
+
+        async getTerms() {
+            try {
+                const res = await authApi.getTerms()
+                return res.data
+            } catch (err) {
+                return null
+            }
+        },
     },
-    async register(credentials) {
-      this.loading = true
-
-      try {
-        const res = await authApi.register(credentials)
-
-        if (!res.success) {
-          throw new Error(res.message)
-        }
-
-        // const { accessToken, user } = res.data
-
-        // this.accessToken = accessToken
-        // this.user = user
-
-        // localStorage.setItem('accessToken', accessToken)
-        // localStorage.setItem('user', user)
-
-        return { success: true }
-      } catch (error) {
-        return {
-          success: false,
-          message: error.message,
-        }
-      } finally {
-        this.loading = false
-      }
-    },
-    async logout() {
-      // try {
-      //   await authApi.logout()
-      // } catch (_) {}
-
-      this.accessToken = null
-      this.user = null
-      localStorage.removeItem('accessToken')
-      localStorage.removeItem('user')
-    },
-    async getTerms() {
-      return await authApi.getTerms()
-    },
-  },
 })

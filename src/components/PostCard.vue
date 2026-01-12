@@ -314,9 +314,9 @@ const editingPost = ref({})
 const editedContent = ref({})
 // === تحميل المنشورات ===
 const feedEl = ref(null)
-onMounted(async () => {
-    authStore.initialize()
-})
+// onMounted(async () => {
+//     authStore.initialize()
+// })
 defineProps({ post: Object })
 useInfiniteScroll(
     feedEl,

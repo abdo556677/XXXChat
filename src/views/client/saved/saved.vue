@@ -81,7 +81,7 @@ const postStore = usePostStore()
 
 const feedEl = ref(null)
 onMounted(async () => {
-    authStore.initialize()
+    // authStore.initialize()
     await postStore.fetchSavedPosts()
 })
 

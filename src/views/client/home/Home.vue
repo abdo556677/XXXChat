@@ -234,7 +234,6 @@ const showEmojiPicker = ref(false)
 // === تحميل المنشورات ===
 const feedEl = ref(null)
 onMounted(async () => {
-    authStore.initialize()
     await postStore.fetchPosts()
 })
 

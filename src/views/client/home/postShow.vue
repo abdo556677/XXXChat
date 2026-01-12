@@ -33,7 +33,7 @@ const post = ref({})
 // === تحميل المنشورات ===
 const feedEl = ref(null)
 onMounted(async () => {
-    authStore.initialize()
+    // authStore.initialize()
     await postStore.fetchPosts()
     post.value = await postStore.getPostById(
         router.currentRoute.value.params.id,

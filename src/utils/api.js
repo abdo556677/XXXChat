@@ -4,25 +4,17 @@ import { useAuthStore } from '@/stores/auth'
 
 // إنشاء instance لـ axios
 const api = axios.create({
-    baseURL: 'https://spectacular-dorey-takami-97ae07ca.koyeb.app/api',
+    baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api',
     headers: {
         'Content-Type': 'application/json',
     },
+    withCredentials: true, // ✅ مهم جداً
 })
 
 // === Request interceptor: إضافة التوكن لكل طلب ===
 api.interceptors.request.use(
     config => {
-        try {
-            const authStore = useAuthStore()
-            const accessToken = authStore.accessToken // نفترض أن authStore يحتوي على accessToken
-            if (accessToken) {
-                config.headers.Authorization = accessToken
-                // console.log('Added Authorization header from Pinia:', accessToken)
-            }
-        } catch (err) {
-            console.warn('Auth store not ready', err)
-        }
+        // لا حاجة لإضافة Authorization header
         return config
     },
     error => Promise.reject(error),
