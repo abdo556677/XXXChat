@@ -1,13 +1,15 @@
-// في Vercel.json أو vercel.config.js
 {
-    "rewrites": [
+    "version": 2,
+    "builds": [
         {
-            "source": "/api/:path*",
-            "destination": "/api/:path*"
-        },
+        "src": "index.js",
+        "use": "@vercel/node"
+        }
+    ],
+    "routes": [
         {
-            "source": "/(.*)",
-            "destination": "/index.html"
+        "src": "/(.*)",
+        "dest": "/index.js"
         }
     ]
 }
