@@ -21,6 +21,7 @@ export const useAuthStore = defineStore('auth', {
         async fetchUser() {
             this.loading = true
             try {
+                
                 const res = await authApi.fetchUser()
 
                 const data = {

@@ -65,8 +65,7 @@ export const usePostStore = defineStore('post', {
                     content: formData.get('content'),
                     image: imageUrl,
                     video: videoUrl,
-                    category,
-                    linkFileUrl,
+                    category
                 })
 
                 const newPost = {
@@ -74,8 +73,8 @@ export const usePostStore = defineStore('post', {
                     content: formData.get('content'),
                     image: imageUrl,
                     video: videoUrl,
-                    author: { name: user.username },
-                    createdAt: new Date(),
+                    author: { name: 'this user posted now'},
+                    createdAt: response.data.createdAt,
                     comments: [],
                     likes: [],
                     likesCount: 0,
