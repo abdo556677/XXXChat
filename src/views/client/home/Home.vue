@@ -170,7 +170,7 @@
                     class="text-center py-12"
                 >
                     <div
-                        class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8"
+                        class="bg-white rounded-2xl shadow-sm p-8"
                     >
                         <div
                             class="w-16 h-16 bg-gradient-to-br from-green-400 to-teal-500 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4"

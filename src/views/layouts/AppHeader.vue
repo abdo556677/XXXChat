@@ -1,217 +1,250 @@
 <template>
-<header
-    class="px-4 border-b shadow-sm relative transition-all duration-300
-           bg-gradient-to-br from-gray-50 to-white
-           dark:from-zinc-900 dark:to-zinc-800
-           border-gray-200 dark:border-zinc-700"
->
-    <div class="max-w-7xl mx-auto h-16 flex items-center justify-between">
-        <!-- Logo -->
-        <div class="flex items-center space-x-4">
-            <div
-                @click="goTo('/home')"
-                class="flex items-center space-x-2 cursor-pointer"
-            >
+    <header
+        class="px-4 border-b shadow-sm relative transition-all duration-300 bg-gradient-to-br from-gray-50 to-white dark:from-zinc-900 dark:to-zinc-800 border-gray-200 dark:border-zinc-700"
+    >
+        <div class="max-w-7xl mx-auto h-16 flex items-center justify-between">
+            <!-- Logo -->
+            <div class="flex items-center space-x-1">
                 <div
-                    class="w-10 h-10 rounded-full flex items-center justify-center
-                           text-white font-bold text-lg shadow-lg
-                           bg-gradient-to-br from-blue-600 to-indigo-700"
-                >
-                    X
-                </div>
-                <span
-                    class="hidden sm:block font-bold text-xl
-                           text-gray-900 dark:text-white"
-                >
-                    Chat
-                </span>
-            </div>
-        </div>
-
-        <!-- Search (desktop) -->
-        <div class="hidden md:flex flex-1 max-w-2xl mx-8">
-            <div class="relative w-full">
-                <Search
-                    class="absolute right-3 top-1/2 -translate-y-1/2
-                           w-5 h-5 text-gray-400"
-                />
-                <input
-                    v-model="searchQuery"
-                    @input="handleSearchInput"
-                    @keydown="handleKeyDown"
-                    @focus="showSuggestions = true"
-                    @blur="hideSuggestions"
-                    type="text"
-                    placeholder="search for any thing..."
-                    class="w-full pr-10 pl-4 py-2 rounded-full text-sm
-                           bg-gray-100 dark:bg-zinc-700
-                           text-gray-900 dark:text-white
-                           placeholder-gray-500 dark:placeholder-gray-400
-                           focus:outline-none focus:ring-2 focus:ring-blue-500
-                           focus:bg-white dark:focus:bg-zinc-800
-                           transition-all"
-                />
-
-                <div
-                    v-if="isSearching"
-                    class="absolute left-3 top-1/2 -translate-y-1/2"
+                    @click="goTo('/home')"
+                    class="flex items-center space-x-2 cursor-pointer"
                 >
                     <div
-                        class="animate-spin rounded-full h-4 w-4
-                               border-b-2 border-blue-600"
-                    ></div>
-                </div>
-
-                <!-- Suggestions -->
-                <transition name="fade">
-                    <div
-                        v-if="showSuggestions && searchSuggestions.length > 0"
-                        class="absolute top-full mt-1 w-full z-50 max-h-60 overflow-y-auto
-                               bg-white dark:bg-zinc-800
-                               border border-gray-200 dark:border-zinc-700
-                               rounded-lg shadow-lg"
+                        class="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-lg bg-gradient-to-br from-blue-600 to-indigo-700"
                     >
-                        <div class="py-2">
-                            <div
-                                class="px-3 py-2 text-xs font-medium
-                                       text-gray-500 dark:text-gray-400
-                                       border-b border-gray-100 dark:border-zinc-700"
-                            >
-                                بحث سابق
+                        X
+                    </div>
+                    <span
+                        class="hidden sm:block font-bold text-xl text-gray-900 dark:text-white"
+                    >
+                        Chat
+                    </span>
+                </div>
+            </div>
+
+            <!-- Search (desktop) -->
+            <div class="hidden md:flex flex-1 max-w-2xl mx-8">
+                <div class="relative w-full">
+                    <Search
+                        class="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"
+                    />
+                    <!-- في template، عدل حقل البحث -->
+                    <input
+                        ref="searchInput"
+                        v-model="searchQuery"
+                        @input="handleSearchInput"
+                        @keydown="handleKeyDown"
+                        @focus="showSuggestions = true"
+                        @blur="hideSuggestions"
+                        type="text"
+                        placeholder="search for any thing..."
+                        class="w-full pr-10 pl-4 py-2 rounded-full text-sm bg-gray-100 dark:bg-zinc-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white dark:focus:bg-zinc-800 transition-all"
+                    />
+
+                    <div
+                        v-if="isSearching"
+                        class="absolute left-3 top-1/2 -translate-y-1/2"
+                    >
+                        <div
+                            class="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"
+                        ></div>
+                    </div>
+
+                    <!-- Suggestions -->
+                    <transition name="fade">
+                        <div
+                            v-if="
+                                showSuggestions && searchSuggestions.length > 0
+                            "
+                            class="absolute top-full mt-1 w-full z-50 max-h-60 overflow-y-auto bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg shadow-lg"
+                        >
+                            <div class="py-2">
+                                <div
+                                    class="px-3 py-2 text-xs font-medium text-gray-500 dark:text-gray-400 border-b border-gray-100 dark:border-zinc-700"
+                                >
+                                    بحث سابق
+                                </div>
+                                <button
+                                    v-for="(
+                                        suggestion, index
+                                    ) in searchSuggestions"
+                                    :key="suggestion"
+                                    @mousedown="selectSuggestion(suggestion)"
+                                    :class="[
+                                        'w-full text-right px-3 py-2 text-sm transition-colors',
+                                        selectedSuggestionIndex === index
+                                            ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400'
+                                            : 'text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-zinc-700',
+                                    ]"
+                                >
+                                    {{ suggestion }}
+                                </button>
                             </div>
+                        </div>
+                    </transition>
+                </div>
+            </div>
+
+            <!-- Icons -->
+            <div class="flex items-center space-x-1 relative">
+                <button
+                    @click="toggleMobileSearch"
+                    class="md:hidden p-2 rounded-full hover:bg-gray-100 dark:hover:bg-zinc-700"
+                >
+                    <Search class="w-6 h-6 text-gray-600 dark:text-gray-300" />
+                </button>
+
+                <button
+                    @click="goTo('notifications')"
+                    class="p-2 rounded-full relative hover:bg-gray-100 dark:hover:bg-zinc-700"
+                >
+                    <Bell class="w-6 h-6 text-gray-600 dark:text-gray-300" />
+                    <span
+                        v-if="unreadNotifications > 0"
+                        class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full animate-pulse"
+                    ></span>
+                </button>
+
+                <button
+                    @click="goTo('/chat')"
+                    class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-zinc-700"
+                >
+                    <MessageCircle
+                        class="w-6 h-6 text-gray-600 dark:text-gray-300"
+                    />
+                </button>
+                <button
+                    @click="goTo('/users')"
+                    class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-zinc-700"
+                >
+                    <Users class="w-6 h-6 text-gray-600 dark:text-gray-300" />
+                </button>
+                <button
+                    @click="goTo('/saved')"
+                    class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-zinc-700"
+                >
+                    <Save class="w-6 h-6 text-gray-600 dark:text-gray-300" />
+                </button>
+                <button
+                    @click="goTo('/home')"
+                    class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-zinc-700"
+                >
+                    <House class="w-6 h-6 text-gray-600 dark:text-gray-300" />
+                </button>
+
+                <!-- Profile -->
+                <div class="relative" ref="profileMenuRef">
+                    <div
+                        @click="toggleProfileMenu"
+                        class="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold cursor-pointer shadow-lg bg-gradient-to-br from-purple-500 to-pink-500 hover:opacity-90 transition-opacity"
+                    >
+                        {{ user?.name?.charAt(0).toUpperCase() || 'م' }}
+                    </div>
+
+                    <!-- Dropdown -->
+                    <transition name="fade">
+                        <div
+                            v-if="showProfileMenu"
+                            class="absolute right-0 mt-2 w-48 z-50 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg shadow-lg py-2"
+                        >
                             <button
-                                v-for="(suggestion, index) in searchSuggestions"
-                                :key="suggestion"
-                                @mousedown="selectSuggestion(suggestion)"
-                                :class="[
-                                    'w-full text-right px-3 py-2 text-sm transition-colors',
-                                    selectedSuggestionIndex === index
-                                        ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400'
-                                        : 'text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-zinc-700',
-                                ]"
+                                @click="goTo('/profile')"
+                                class="w-full text-right px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-700 flex items-center justify-between"
                             >
-                                {{ suggestion }}
+                                <span>profile</span>
+                                <User class="w-4 h-4" />
+                            </button>
+
+                            <div
+                                class="border-t my-1 dark:border-zinc-700"
+                            ></div>
+
+                            <button
+                                @click="toggleDarkMode"
+                                class="w-full text-right px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-700 flex items-center justify-between"
+                            >
+                                <span>dark mode</span>
+                                <Moon class="w-4 h-4" />
+                            </button>
+
+                            <button
+                                @click="logout"
+                                class="w-full text-right px-4 py-2 text-sm text-red-600 hover:bg-gray-100 dark:hover:bg-zinc-700 flex items-center justify-between"
+                            >
+                                <span>logout</span>
+                                <LogOut class="w-4 h-4 text-red-500" />
                             </button>
                         </div>
-                    </div>
-                </transition>
+                    </transition>
+                </div>
             </div>
         </div>
-
-        <!-- Icons -->
-        <div class="flex items-center relative">
-            <button
-                @click="toggleMobileSearch"
-                class="md:hidden p-2 rounded-full
-                       hover:bg-gray-100 dark:hover:bg-zinc-700"
-            >
-                <Search class="w-6 h-6 text-gray-600 dark:text-gray-300" />
-            </button>
-
-            <button
-                @click="goTo('notifications')"
-                class="p-2 rounded-full relative
-                       hover:bg-gray-100 dark:hover:bg-zinc-700"
-            >
-                <Bell class="w-6 h-6 text-gray-600 dark:text-gray-300" />
-                <span
-                    v-if="unreadNotifications > 0"
-                    class="absolute top-1 right-1 w-2 h-2
-                           bg-red-500 rounded-full animate-pulse"
-                ></span>
-            </button>
-
-            <button
-                @click="goTo('/chat')"
-                class="p-2 rounded-full
-                       hover:bg-gray-100 dark:hover:bg-zinc-700"
-            >
-                <MessageCircle class="w-6 h-6 text-gray-600 dark:text-gray-300" />
-            </button>
-            <button
-                @click="goTo('/users')"
-                class="p-2 rounded-full
-                       hover:bg-gray-100 dark:hover:bg-zinc-700"
-            >
-                <Users class="w-6 h-6 text-gray-600 dark:text-gray-300" />
-            </button>
-            <button
-                @click="goTo('/saved')"
-                class="p-2 rounded-full
-                       hover:bg-gray-100 dark:hover:bg-zinc-700"
-            >
-                <Save class="w-6 h-6 text-gray-600 dark:text-gray-300" />
-            </button>
-            <button
-                @click="goTo('/home')"
-                class="p-2 rounded-full
-                       hover:bg-gray-100 dark:hover:bg-zinc-700"
-            >
-                <House class="w-6 h-6 text-gray-600 dark:text-gray-300" />
-            </button>
-
-            <!-- Profile -->
-            <div class="relative" ref="profileMenuRef">
-                <div
-                    @click="toggleProfileMenu"
-                    class="w-10 h-10 rounded-full flex items-center justify-center
-                           text-white font-bold cursor-pointer shadow-lg
-                           bg-gradient-to-br from-purple-500 to-pink-500
-                           hover:opacity-90 transition-opacity"
+        <!-- Mobile Search Bar (يظهر عند الضغط على أيقونة البحث) -->
+<transition name="slide">
+    <div
+        v-if="showMobileSearch"
+        class="md:hidden absolute top-16 left-0 right-0 bg-white dark:bg-zinc-800 border-b border-gray-200 dark:border-zinc-700 shadow-lg z-40"
+    >
+        <div class="px-4 py-3">
+            <div class="relative">
+                <input
+                    ref="mobileSearchInput"
+                    v-model="searchQuery"
+                    @keydown.enter="performSearch"
+                    @keydown.esc="showMobileSearch = false"
+                    type="text"
+                    placeholder="search for any thing..."
+                    class="w-full pr-10 pl-4 py-3 rounded-full text-sm bg-gray-100 dark:bg-zinc-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white dark:focus:bg-zinc-800 transition-all"
+                />
+                
+                <Search
+                    class="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"
+                />
+                
+                <button
+                    @click="showMobileSearch = false"
+                    class="absolute left-3 top-1/2 -translate-y-1/2 p-1"
                 >
-                    {{ user?.name?.charAt(0).toUpperCase() || 'م' }}
-                </div>
-
-                <!-- Dropdown -->
-                <transition name="fade">
+                    <X class="w-5 h-5 text-gray-500" />
+                </button>
+                
+                <div
+                    v-if="isSearching"
+                    class="absolute right-10 top-1/2 -translate-y-1/2"
+                >
                     <div
-                        v-if="showProfileMenu"
-                        class="absolute right-0 mt-2 w-48 z-50
-                               bg-white dark:bg-zinc-800
-                               border border-gray-200 dark:border-zinc-700
-                               rounded-lg shadow-lg py-2"
-                    >
-                        <button
-                            @click="goTo('/profile')"
-                            class="w-full text-right px-4 py-2 text-sm
-                                   text-gray-700 dark:text-gray-200
-                                   hover:bg-gray-100 dark:hover:bg-zinc-700
-                                   flex items-center justify-between"
+                        class="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"
+                    ></div>
+                </div>
+            </div>
+            
+            <!-- اقتراحات البحث للهاتف -->
+            <transition name="fade">
+                <div
+                    v-if="searchQuery && searchSuggestions.length > 0"
+                    class="mt-2 max-h-60 overflow-y-auto bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg shadow-lg"
+                >
+                    <div class="py-2">
+                        <div
+                            class="px-3 py-2 text-xs font-medium text-gray-500 dark:text-gray-400 border-b border-gray-100 dark:border-zinc-700"
                         >
-                            <span>profile</span>
-                            <User class="w-4 h-4" />
-                        </button>
-
-                        <div class="border-t my-1 dark:border-zinc-700"></div>
-
+                            بحث سابق
+                        </div>
                         <button
-                            @click="toggleDarkMode"
-                            class="w-full text-right px-4 py-2 text-sm
-                                   text-gray-700 dark:text-gray-200
-                                   hover:bg-gray-100 dark:hover:bg-zinc-700
-                                   flex items-center justify-between"
+                            v-for="(suggestion, index) in searchSuggestions"
+                            :key="suggestion"
+                            @click="selectSuggestion(suggestion)"
+                            class="w-full text-right px-3 py-3 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-zinc-700 transition-colors"
                         >
-                            <span>dark mode</span>
-                            <Moon class="w-4 h-4" />
-                        </button>
-
-                        <button
-                            @click="logout"
-                            class="w-full text-right px-4 py-2 text-sm
-                                   text-red-600 hover:bg-gray-100
-                                   dark:hover:bg-zinc-700
-                                   flex items-center justify-between"
-                        >
-                            <span>logout</span>
-                            <LogOut class="w-4 h-4 text-red-500" />
+                            {{ suggestion }}
                         </button>
                     </div>
-                </transition>
-            </div>
+                </div>
+            </transition>
         </div>
     </div>
-</header>
-
+</transition>
+    </header>
 </template>
 
 <script setup>
@@ -284,7 +317,7 @@ const performSearch = async () => {
         // if (context === 'global') {
         //     router.push('/search')
         // }
-        
+
         showSuggestions.value = false
         toast.success(`نتائج البحث عن: ${searchQuery.value}`)
     } catch {
@@ -297,7 +330,12 @@ const performSearch = async () => {
 const toggleMobileSearch = () => {
     showMobileSearch.value = !showMobileSearch.value
     if (showMobileSearch.value) {
-        nextTick(() => mobileSearchInput.value?.focus())
+        nextTick(() => {
+            // تحقق إذا كان العنصر موجوداً قبل التركيز عليه
+            if (mobileSearchInput.value) {
+                mobileSearchInput.value.focus()
+            }
+        })
     }
 }
 
