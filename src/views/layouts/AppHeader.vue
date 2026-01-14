@@ -99,7 +99,7 @@
         </div>
 
         <!-- Icons -->
-        <div class="flex items-center space-x-2 relative">
+        <div class="flex items-center relative">
             <button
                 @click="toggleMobileSearch"
                 class="md:hidden p-2 rounded-full
@@ -127,6 +127,27 @@
                        hover:bg-gray-100 dark:hover:bg-zinc-700"
             >
                 <MessageCircle class="w-6 h-6 text-gray-600 dark:text-gray-300" />
+            </button>
+            <button
+                @click="goTo('/users')"
+                class="p-2 rounded-full
+                       hover:bg-gray-100 dark:hover:bg-zinc-700"
+            >
+                <Users class="w-6 h-6 text-gray-600 dark:text-gray-300" />
+            </button>
+            <button
+                @click="goTo('/saved')"
+                class="p-2 rounded-full
+                       hover:bg-gray-100 dark:hover:bg-zinc-700"
+            >
+                <Save class="w-6 h-6 text-gray-600 dark:text-gray-300" />
+            </button>
+            <button
+                @click="goTo('/home')"
+                class="p-2 rounded-full
+                       hover:bg-gray-100 dark:hover:bg-zinc-700"
+            >
+                <House class="w-6 h-6 text-gray-600 dark:text-gray-300" />
             </button>
 
             <!-- Profile -->
@@ -210,6 +231,8 @@ import {
     X,
     Moon,
     LogOut,
+    User2,
+    Save,
 } from 'lucide-vue-next'
 
 const router = useRouter()

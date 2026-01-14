@@ -166,7 +166,6 @@ export const addLikePost = async postId => {
             throw new Error('Post ID is required')
         }
         const response = await api.post(`/posts/${postId}/like`)
-        console.log(response)
         return {
             success: true,
             data: response.data,
@@ -182,7 +181,6 @@ export const unlikePost = async postId => {
             throw new Error('Post ID is required')
         }
         const response = await api.post(`/posts/${postId}/unlike`)
-        console.log(response)
         return {
             success: true,
             data: response.data,

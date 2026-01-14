@@ -287,7 +287,6 @@ export const useUserStore = defineStore('user', {
             try {
                 const authStore = useAuthStore()
                 const response = await fetchFollowers(authStore.user.id)
-                console.log(response.data.followers)
                 const data = response.data.followers.map(user => ({
                     id: user._id,
                     name: user.username,
@@ -325,7 +324,6 @@ export const useUserStore = defineStore('user', {
             try {
                 const response = await fetchFollowing(authStore.user.id)
 
-                console.log(response.data.following)
                 const data = response.data.following.map(user => ({
                     id: user._id,
                     name: user.username,
@@ -335,7 +333,6 @@ export const useUserStore = defineStore('user', {
                     // isFollower: user.isFollower,
                     isFollowing: true,
                 }))
-                console.log(data)
                 if (page === 1) {
                     this.following = data
                 } else {
@@ -555,7 +552,6 @@ export const useUserStore = defineStore('user', {
             this.loading = true
             try {
                 const data = (await getUserById(userId)).data
-                console.log(data)
                 const user = {
                     id: data._id,
                     name: data.username,
@@ -574,7 +570,6 @@ export const useUserStore = defineStore('user', {
                     lastLogin: Date.now,
                     verificationStatus: data.verificationStatus,
                 }
-                console.log(user)
                 this.currentUser = user
             } catch (error) {
                 console.log(error)

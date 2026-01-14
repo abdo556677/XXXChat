@@ -132,7 +132,6 @@ export const usePostStore = defineStore('post', {
             try {
                 // Simulate API call
                 const data = await (await fetchPosts()).data
-                console.log(data)
                 const posts = data.map(post => ({
                     id: post._id,
                     author: { name: post.userId.username, id: post.userId._id },
@@ -149,7 +148,6 @@ export const usePostStore = defineStore('post', {
                     isSaved: post.isSaved,
                     likes: post.likes,
                 }))
-                console.log(data)
                 if (this.posts.length > 0) return
                 else this.posts = posts
             } catch (error) {
