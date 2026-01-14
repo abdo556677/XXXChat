@@ -9,8 +9,9 @@ import SocketService from '@/services/socket'
 const userStore = useUserStore()
 const isActive = ref(true)
 
-
 onMounted(() => {
+    console.log(import.meta.env.MODE) // development / production
+    console.log(import.meta.env.VITE_API_BASE_URL)
     //   // تعيين الحالة عند التحميل
     isActive.value = !document.hidden
     userStore.isOnline = isActive.value

@@ -48,7 +48,6 @@ export const login = async credentials => {
     }
 
     try {
-        
         const response = await api.post('/auth/login', credentials, {
             timeout: 3000, // 10 second timeout
             headers: {
@@ -82,6 +81,7 @@ export const login = async credentials => {
                 403: 'Account is disabled or locked',
                 404: 'Authentication service unavailable',
                 422: 'Invalid input data',
+                423: 'Account is temporarily locked. Please try again later',
                 429: 'Too many attempts. Please try again later',
                 500: 'Server error. Please try again later',
             }
@@ -323,19 +323,29 @@ export const fetchUser = async () => {
  * @param {string} refreshToken - Refresh token
  * @returns {Promise<LoginResponse>} Refresh response
  */
-export const refreshToken = async refreshToken => {
+export const refreshToken = async () => {
     try {
-        const response = await api.post('/auth/refresh', { refreshToken })
+        const response = await api.post(
+            '/auth/refresh-token',
+            {},
+            {
+                timeout: 10000,
+            },
+        )
         return {
             success: true,
             data: response.data,
             message: 'Token refreshed successfully',
         }
     } catch (error) {
+        console.error('Refresh token error:', error)
         return {
             success: false,
-            message: 'Token refresh failed',
-            error: error.response?.status || 'REFRESH_FAILED',
+            message: 'Failed to refresh token',
+            error:
+                error.response?.status === 401
+                    ? 'INVALID_REFRESH_TOKEN'
+                    : 'REFRESH_ERROR',
         }
     }
 }
