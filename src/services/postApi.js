@@ -133,9 +133,13 @@ export const searchPosts = async query => {
     }
 }
 
-export const addPost = async data => {
+export const addPost = async formData => {
     try {
-        const response = await api.post('/posts', data)
+        const response = await api.post('/posts', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        })
 
         return {
             success: true,
@@ -146,6 +150,7 @@ export const addPost = async data => {
         throw handleApiError(error)
     }
 }
+
 export const editPost = async (postId, content) => {
     try {
         const response = await api.put(`/posts/${postId}`, { content }) // axios JSON

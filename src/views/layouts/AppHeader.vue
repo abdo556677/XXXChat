@@ -86,7 +86,7 @@
             </div>
 
             <!-- Icons -->
-            <div class="flex items-center space-x-1 relative">
+            <div class="flex items-center relative overflow-x-auto">
                 <button
                     @click="toggleMobileSearch"
                     class="md:hidden p-2 rounded-full hover:bg-gray-100 dark:hover:bg-zinc-700"

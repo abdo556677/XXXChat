@@ -33,47 +33,20 @@ export const usePostStore = defineStore('post', {
             state.posts.filter(post => post.author.id == id),
     },
     actions: {
-        async createPost(formData, user) {
+        async createPost(formData) {
             this.loading = true
 
             try {
-                const imageFile = formData.get('image')
-                const videoFile = formData.get('video')
-
-                let imageUrl = null
-                let videoUrl = null
-                let nameFile = null
-                // 🖼️ رفع الصورة
-                if (imageFile) {
-                    const data = await uploadFile(imageFile, 'images')
-                    nameFile = data.linkFileUrl
-                    imageUrl = data.imageUrl
-                    console.log('Uploaded image URL:', imageUrl, nameFile)
-                }
-
-                // 🎥 رفع الفيديو
-                if (videoFile) {
-                    videoUrl = await uploadFile(videoFile, 'videos')
-                }
-
-                let category = 'article'
-                if (imageUrl) category = 'image'
-                else if (videoUrl) category = 'video'
-
-                // ⬅️ نرسل URL الحقيقي
-                const response = await addPost({
-                    content: formData.get('content'),
-                    image: imageUrl,
-                    video: videoUrl,
-                    category
-                })
+                const response = await addPost(formData)
 
                 const newPost = {
                     id: response.data._id,
-                    content: formData.get('content'),
-                    image: imageUrl,
-                    video: videoUrl,
-                    author: { name: 'this user posted now'},
+                    content: response.data.content,
+                    image: null,
+                    video: null,
+                    author: {
+                        name: 'this user posted now',
+                    },
                     createdAt: response.data.createdAt,
                     comments: [],
                     likes: [],
@@ -92,7 +65,6 @@ export const usePostStore = defineStore('post', {
                 this.loading = false
             }
         },
-
         async searchPosts(query) {
             this.loading = true
             try {
