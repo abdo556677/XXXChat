@@ -49,15 +49,19 @@
 
                     <!-- Tools -->
                     <div
-                        class="flex items-center justify-between pt-4 border-t border-gray-100 dark:border-gray-700"
+                        class="flex flex-col sm:flex-row sm:items-center sm:justify-between pt-4 border-t border-gray-100 dark:border-gray-700 gap-2"
                     >
-                        <div class="flex items-center space-x-2">
+                        <!-- الأزرار: Image, Video, Emoji -->
+                        <div class="flex items-center gap-2 flex-wrap">
                             <!-- Image -->
                             <label
                                 class="flex items-center space-x-2 cursor-pointer text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 p-2 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
                             >
                                 <ImageIcon class="w-6 h-6" />
-                                <span class="text-sm font-medium">image</span>
+                                <span
+                                    class="text-sm font-medium hidden sm:inline"
+                                    >image</span
+                                >
                                 <input
                                     type="file"
                                     accept="image/*"
@@ -71,7 +75,10 @@
                                 class="flex items-center space-x-2 cursor-pointer text-gray-600 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 p-2 rounded-lg hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors"
                             >
                                 <Video class="w-6 h-6" />
-                                <span class="text-sm font-medium">video</span>
+                                <span
+                                    class="text-sm font-medium hidden sm:inline"
+                                    >video</span
+                                >
                                 <input
                                     type="file"
                                     accept="video/*"
@@ -83,14 +90,17 @@
                             <!-- Emoji -->
                             <button
                                 @click="showEmojiPicker = !showEmojiPicker"
-                                class="flex items-center space-x-2 cursor-pointer text-gray-600 dark:text-gray-300 hover:text-yellow-600 dark:hover:text-yellow-400 p-2 rounded-lg hover:bg-yellow-50 dark:hover:bg-yellow-900/20 transition-colors"
+                                class="flex items-center space-x-2 text-gray-600 dark:text-gray-300 hover:text-yellow-600 dark:hover:text-yellow-400 p-2 rounded-lg hover:bg-yellow-50 dark:hover:bg-yellow-900/20 transition-colors"
                             >
                                 <Smile class="w-6 h-6" />
-                                <span class="text-sm font-medium">emoji</span>
+                                <span
+                                    class="text-sm font-medium hidden sm:inline"
+                                    >emoji</span
+                                >
                             </button>
                         </div>
 
-                        <!-- Publish -->
+                        <!-- زر النشر -->
                         <button
                             @click="addPost"
                             :disabled="
@@ -99,7 +109,7 @@
                                     !selectedImage &&
                                     !selectedVideo)
                             "
-                            class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg hover:shadow-xl flex items-center space-x-2"
+                            class="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-2 rounded-lg transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             <span>{{
                                 isPosting ? 'جاري النشر...' : 'نشر'

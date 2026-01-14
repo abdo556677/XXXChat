@@ -3316,6 +3316,10 @@ video {
     margin-top: 1.5rem;
   }
 
+  .sm\:ml-auto {
+    margin-left: auto;
+  }
+
   .sm\:block {
     display: block;
   }
@@ -3344,6 +3348,10 @@ video {
     width: 1rem;
   }
 
+  .sm\:w-auto {
+    width: auto;
+  }
+
   .sm\:grid-cols-2 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -3356,8 +3364,16 @@ video {
     align-items: flex-end;
   }
 
+  .sm\:items-center {
+    align-items: center;
+  }
+
   .sm\:justify-start {
     justify-content: flex-start;
+  }
+
+  .sm\:justify-between {
+    justify-content: space-between;
   }
 
   .sm\:gap-4 {
