@@ -4,7 +4,7 @@
     >
         <div class="max-w-7xl mx-auto h-16 flex items-center justify-between">
             <!-- Logo -->
-            <div class="flex items-center space-x-1">
+            <div class="hidden sm:block  items-center space-x-1">
                 <div
                     @click="goTo('/home')"
                     class="flex items-center space-x-2 cursor-pointer"
@@ -86,7 +86,7 @@
             </div>
 
             <!-- Icons -->
-            <div class="flex items-center relative overflow-x-auto">
+            <div class="flex items-center relative">
                 <button
                     @click="toggleMobileSearch"
                     class="md:hidden p-2 rounded-full hover:bg-gray-100 dark:hover:bg-zinc-700"
@@ -133,6 +133,8 @@
                 </button>
 
                 <!-- Profile -->
+            </div>
+            <div class="flex items-center relative">
                 <div class="relative" ref="profileMenuRef">
                     <div
                         @click="toggleProfileMenu"
@@ -180,70 +182,72 @@
             </div>
         </div>
         <!-- Mobile Search Bar (يظهر عند الضغط على أيقونة البحث) -->
-<transition name="slide">
-    <div
-        v-if="showMobileSearch"
-        class="md:hidden absolute top-16 left-0 right-0 bg-white dark:bg-zinc-800 border-b border-gray-200 dark:border-zinc-700 shadow-lg z-40"
-    >
-        <div class="px-4 py-3">
-            <div class="relative">
-                <input
-                    ref="mobileSearchInput"
-                    v-model="searchQuery"
-                    @keydown.enter="performSearch"
-                    @keydown.esc="showMobileSearch = false"
-                    type="text"
-                    placeholder="search for any thing..."
-                    class="w-full pr-10 pl-4 py-3 rounded-full text-sm bg-gray-100 dark:bg-zinc-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white dark:focus:bg-zinc-800 transition-all"
-                />
-                
-                <Search
-                    class="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"
-                />
-                
-                <button
-                    @click="showMobileSearch = false"
-                    class="absolute left-3 top-1/2 -translate-y-1/2 p-1"
-                >
-                    <X class="w-5 h-5 text-gray-500" />
-                </button>
-                
-                <div
-                    v-if="isSearching"
-                    class="absolute right-10 top-1/2 -translate-y-1/2"
-                >
-                    <div
-                        class="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"
-                    ></div>
+        <transition name="slide">
+            <div
+                v-if="showMobileSearch"
+                class="md:hidden absolute top-16 left-0 right-0 bg-white dark:bg-zinc-800 border-b border-gray-200 dark:border-zinc-700 shadow-lg z-40"
+            >
+                <div class="px-4 py-3">
+                    <div class="relative">
+                        <input
+                            ref="mobileSearchInput"
+                            v-model="searchQuery"
+                            @keydown.enter="performSearch"
+                            @keydown.esc="showMobileSearch = false"
+                            type="text"
+                            placeholder="search for any thing..."
+                            class="w-full pr-10 pl-4 py-3 rounded-full text-sm bg-gray-100 dark:bg-zinc-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white dark:focus:bg-zinc-800 transition-all"
+                        />
+
+                        <Search
+                            class="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"
+                        />
+
+                        <button
+                            @click="showMobileSearch = false"
+                            class="absolute left-3 top-1/2 -translate-y-1/2 p-1"
+                        >
+                            <X class="w-5 h-5 text-gray-500" />
+                        </button>
+
+                        <div
+                            v-if="isSearching"
+                            class="absolute right-10 top-1/2 -translate-y-1/2"
+                        >
+                            <div
+                                class="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"
+                            ></div>
+                        </div>
+                    </div>
+
+                    <!-- اقتراحات البحث للهاتف -->
+                    <transition name="fade">
+                        <div
+                            v-if="searchQuery && searchSuggestions.length > 0"
+                            class="mt-2 max-h-60 overflow-y-auto bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg shadow-lg"
+                        >
+                            <div class="py-2">
+                                <div
+                                    class="px-3 py-2 text-xs font-medium text-gray-500 dark:text-gray-400 border-b border-gray-100 dark:border-zinc-700"
+                                >
+                                    بحث سابق
+                                </div>
+                                <button
+                                    v-for="(
+                                        suggestion, index
+                                    ) in searchSuggestions"
+                                    :key="suggestion"
+                                    @click="selectSuggestion(suggestion)"
+                                    class="w-full text-right px-3 py-3 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-zinc-700 transition-colors"
+                                >
+                                    {{ suggestion }}
+                                </button>
+                            </div>
+                        </div>
+                    </transition>
                 </div>
             </div>
-            
-            <!-- اقتراحات البحث للهاتف -->
-            <transition name="fade">
-                <div
-                    v-if="searchQuery && searchSuggestions.length > 0"
-                    class="mt-2 max-h-60 overflow-y-auto bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg shadow-lg"
-                >
-                    <div class="py-2">
-                        <div
-                            class="px-3 py-2 text-xs font-medium text-gray-500 dark:text-gray-400 border-b border-gray-100 dark:border-zinc-700"
-                        >
-                            بحث سابق
-                        </div>
-                        <button
-                            v-for="(suggestion, index) in searchSuggestions"
-                            :key="suggestion"
-                            @click="selectSuggestion(suggestion)"
-                            class="w-full text-right px-3 py-3 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-zinc-700 transition-colors"
-                        >
-                            {{ suggestion }}
-                        </button>
-                    </div>
-                </div>
-            </transition>
-        </div>
-    </div>
-</transition>
+        </transition>
     </header>
 </template>
 

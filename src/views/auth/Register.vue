@@ -237,7 +237,7 @@
                     <p class="text-sm text-gray-600">
                         Already have an account?
                         <router-link
-                            to="auth/login"
+                            to="/auth/login"
                             class="font-medium text-green-600 hover:text-green-500 transition-colors duration-200"
                         >
                             Sign in here
